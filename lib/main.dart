@@ -10,6 +10,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
+      debugShowCheckedModeBanner: false,
       title: 'Flutter User API Demo',
       theme: ThemeData(
         primarySwatch: Colors.blue,
@@ -46,14 +47,14 @@ class _UserListScreenState extends State<UserListScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('User List'),
+        title: const Text('Lista de Usuários'),
       ),
-      body: Column(
-        children: [
-          _buildUserList(),
-          _buildAddUserForm(),
-        ],
-      ),
+      body: _buildUserList(),
+      floatingActionButton: _addUserButton(),
+
+      // Descomentar um dos dois:
+      bottomNavigationBar: null,
+      // bottomNavigationBar: _buildAddUserForm(),
     );
   }
 
@@ -81,7 +82,7 @@ class _UserListScreenState extends State<UserListScreen> {
               },
             );
           } else {
-            return Center(child: CircularProgressIndicator());
+            return const Center(child: CircularProgressIndicator());
           }
         },
       ),
@@ -93,11 +94,11 @@ class _UserListScreenState extends State<UserListScreen> {
       spacing: 12,
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.edit),
+          icon: const Icon(Icons.edit),
           onPressed: () => _showEditDialog(user),
         ),
         IconButton(
-          icon: Icon(Icons.delete),
+          icon: const Icon(Icons.delete),
           onPressed: () => _deleteUser(user.id!),
         ),
       ],
@@ -115,29 +116,29 @@ class _UserListScreenState extends State<UserListScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Edit User"),
+        title: const Text("Editar Usuário"),
         content: SingleChildScrollView(
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: <Widget>[
               TextFormField(
                   controller: tituloController,
-                  decoration: InputDecoration(labelText: 'Title')),
+                  decoration: const InputDecoration(labelText: 'Título')),
               TextFormField(
                   controller: firstnameController,
-                  decoration: InputDecoration(labelText: 'First Name')),
+                  decoration: const InputDecoration(labelText: 'Nome')),
               TextFormField(
                   controller: lastnameController,
-                  decoration: InputDecoration(labelText: 'Last Name')),
+                  decoration: const InputDecoration(labelText: 'Sobrenome')),
               TextFormField(
                   controller: pictureController,
-                  decoration: InputDecoration(labelText: 'Picture URL')),
+                  decoration: const InputDecoration(labelText: 'Foto (URL)')),
             ],
           ),
         ),
         actions: <Widget>[
           TextButton(
-            child: Text("Update"),
+            child: const Text("Salvar"),
             onPressed: () {
               _updateUser(user);
               Navigator.of(context).pop();
@@ -162,43 +163,84 @@ class _UserListScreenState extends State<UserListScreen> {
         lastnameController.text.isNotEmpty &&
         pictureController.text.isNotEmpty) {
       userService.updateUser(user.id!, dataToUpdate).then((updatedUser) {
-        _showSnackbar('User updated successfully!');
+        _showSnackbar('Dados alterados com sucesso!');
         _refreshUserList();
       }).catchError((error) {
-        _showSnackbar('Failed to update user: $error');
+        _showSnackbar('Falha ao salvar dados do usuário: $error');
       });
     }
   }
 
   void _deleteUser(String id) {
     userService.deleteUser(id).then((_) {
-      _showSnackbar('User deleted successfully!');
+      _showSnackbar('Usuário deletado com sucesso!');
       _refreshUserList();
     }).catchError((error) {
-      _showSnackbar('Failed to delete user.');
+      _showSnackbar('Falha ao deletar usuário.');
     });
   }
 
-  Widget _buildAddUserForm() {
-    return Padding(
-      padding: EdgeInsets.all(8.0),
-      child: Column(
-        children: <Widget>[
-          TextFormField(
-              controller: firstnameController,
-              decoration: InputDecoration(labelText: 'First Name')),
-          TextFormField(
-              controller: lastnameController,
-              decoration: InputDecoration(labelText: 'Last Name')),
-          TextFormField(
-              controller: emailController, // Added email input field
-              decoration: InputDecoration(labelText: 'Email')),
-          ElevatedButton(
-            onPressed: _addUser,
-            child: Text('Add User'),
-          ),
-        ],
-      ),
+  Widget? _addUserButton() {
+    return FloatingActionButton(
+      // onPressed: _toggleBottomNavigationBar,
+      onPressed: () {
+        showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              contentPadding: const EdgeInsets.all(16.0),
+              title: const Text('Novo Usuário'),
+              content: SizedBox(
+                width: 400,
+                height: 240,
+                child: Column(
+                  children: <Widget>[
+                    TextFormField(
+                        controller: firstnameController,
+                        decoration: const InputDecoration(labelText: 'Nome')),
+                    TextFormField(
+                        controller: lastnameController,
+                        decoration:
+                            const InputDecoration(labelText: 'Sobrenome')),
+                    TextFormField(
+                        controller: emailController, // Added email input field
+                        decoration: const InputDecoration(labelText: 'E-mail')),
+                    const SizedBox(height: 28),
+                    Align(
+                      alignment: Alignment.centerRight,
+                      child: ElevatedButton(
+                        onPressed: _addUser,
+                        style: ElevatedButton.styleFrom(
+                          shape: RoundedRectangleBorder(
+                            borderRadius: BorderRadius.circular(15),
+                          ),
+                        ),
+                        child: const Padding(
+                          padding: EdgeInsets.only(top: 8, bottom: 8),
+                          child: Text(
+                            'Adicionar',
+                            style: TextStyle(
+                              color: Color.fromARGB(255, 63, 63, 63),
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(context),
+                  child: const Text('Fechar'),
+                ),
+              ],
+            );
+          },
+        );
+      },
+      child: const Icon(Icons.add),
     );
   }
 
@@ -217,13 +259,13 @@ class _UserListScreenState extends State<UserListScreen> {
         picture: pictureController.text, // Incluído, assumindo que é necessário
       ))
           .then((newUser) {
-        _showSnackbar('User added successfully!');
+        _showSnackbar('Usuário adicionado com sucesso!');
         _refreshUserList();
       }).catchError((error) {
-        _showSnackbar('Failed to add user: $error');
+        _showSnackbar('Falha ao criar usuário: $error');
       });
     } else {
-      _showSnackbar('Please fill in all fields.');
+      _showSnackbar('Por favor preencha todos os dados.');
     }
   }
 

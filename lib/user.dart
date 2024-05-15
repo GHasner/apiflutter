@@ -6,8 +6,8 @@ class User {
   final String email;
   final String picture;
 
-  User(
-      {required this.id,
+  User({
+      required this.id,
       required this.title,
       required this.firstName,
       required this.lastName,
