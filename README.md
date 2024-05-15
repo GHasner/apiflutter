@@ -20,4 +20,6 @@ Arquivo de código que roda o programa, cria as exibições (telas) e interaçõ
 
 #### Explicação do código
 
-O Scaffold da tela principal tem como body o Widget '_buildUserList()' e o floatingActionButton o Widget '_addUserButton()',
+O Scaffold da tela principal tem como body o Widget '_buildUserList()' e o floatingActionButton o Widget '_addUserButton()'.
+
+O Widget _buildUserList() usa um FutureBuilder para criar uma tarefa assyncrona de exibir todos os Users, em adição exibe ao lado as opções de editar e excluir o User. E o Widget _addUserButton() retorna um FloatingActionButton que quando pressionado exibe um AlertDialog() composto por um formulário de criação de um User.
