@@ -1,16 +1,20 @@
 # apiflutter
 
-A new Flutter project.
+Este aplicativo é uma api que administra uma lista de usuários, com base de dados importado da url ’https://dummyapi.io/data/v1/, e desenvolvida em Flutter no Visual Studio Code’. Sua tela principal exibe a lista de usuários e as opções de edição e exclusão por usuário, e um botão flutuante para adicionar um novo usuário.
 
-## Getting Started
+## Explicação do Código
 
-This project is a starting point for a Flutter application.
+A pasta /lib possui três arquivos de código, main.dart, user.dart e user_service.dart.
 
-A few resources to get you started if this is your first Flutter project:
+### user.dart
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Compõe a classe base ("User") para a api, possuindo os campos (em português): id; título; nome; sobrenome; email; foto. E os métodos para converter em Json e de Json.
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+### user_service.dart
+
+Arquivo Service (Controlador) da api, fazendo a conexão com a base de dados remota e criando os métodos base para uma api, tais como criar, atualizar, excluir e evidenciar um User ou exibir todos os Users.
+
+### main.dart
+
+Arquivo de código que roda o programa, cria as exibições (telas) e interações (ações).
+
