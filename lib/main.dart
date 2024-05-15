@@ -51,10 +51,6 @@ class _UserListScreenState extends State<UserListScreen> {
       ),
       body: _buildUserList(),
       floatingActionButton: _addUserButton(),
-
-      // Descomentar um dos dois:
-      bottomNavigationBar: null,
-      // bottomNavigationBar: _buildAddUserForm(),
     );
   }
 
