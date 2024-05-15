@@ -95,7 +95,7 @@ class _UserListScreenState extends State<UserListScreen> {
         ),
         IconButton(
           icon: const Icon(Icons.delete),
-          onPressed: () => _deleteUser(user.id!),
+          onPressed: () => _deleteUser(user.id),
         ),
       ],
     );
@@ -178,7 +178,6 @@ class _UserListScreenState extends State<UserListScreen> {
 
   Widget? _addUserButton() {
     return FloatingActionButton(
-      // onPressed: _toggleBottomNavigationBar,
       onPressed: () {
         showDialog(
           context: context,
